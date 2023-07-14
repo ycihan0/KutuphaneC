@@ -1,0 +1,260 @@
+﻿@section Styles
+	{
+	<link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+}
+
+<h1>Yazarlar</h1>
+
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body" style="overflow:auto">
+
+				<h3 class="card-title">Yazar Listesi
+					<a href="#" id="btnEkle" class="btn btn-primary waves-effect waves-light">Ekle</a>
+				</h3>
+				<table id="tblAuthor" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<thead>
+						<tr>
+							<th>Guid</th>
+							<th>Yazar Adı</th>
+							<th>Açıklama</th>
+							<th>Oluşturma Tarihi</th>
+							<th>İşlemler</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- Scrollable modal example-->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalTitleId">Scrollable Modal</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					@*------------Full Name------------*@
+					<div class="mb-3">
+						<label class="form-label" for="formrow-Fullname-input">Yazar Adı</label>
+						<input type="text" class="form-control" id="txtName" placeholder="Yazarın tam adını yazınız">
+					</div>
+					@*------------Text Area------------*@
+					<div class="mb-3">
+						<label class="form-label">Yazar Açıklaması</label>
+						<div>
+							<textarea required id="txtDescription"  class="form-control" rows="5"></textarea>
+						</div>
+					</div>
+					@*------------Email ve Şifre------------*@
+					@*<div class="row">
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label class="form-label" for="formrow-email-input">Email</label>
+								<input type="email" class="form-control" id="formrow-email-input" placeholder="Enter your email address">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label class="form-label" for="formrow-password-input">Password</label>
+								<input type="password" class="form-control" id="formrow-password-input" placeholder="Enter your password">
+							</div>
+						</div>
+					</div>*@
+					@*------------Tik------------*@
+					@*<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="formrow-customCheck">
+						<label class="form-check-label" for="formrow-customCheck">Check me out</label>
+					</div>*@
+					@*------------Butonlar------------*@
+					@*<div class="d-flex flex-wrap gap-3 mt-3">
+						<button type="submit" class="btn btn-primary waves-effect waves-light w-md">Submit</button>
+						<button type="reset" class="btn btn-outline-danger waves-effect waves-light w-md">Reset</button>
+					</div>*@
+					@*------------Aşağı kayarak açılan menü------------*@
+					@*<div class="col-md-6">
+						<div class="form-floating mb-3">
+							<select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
+								<option selected>Open this select menu</option>
+								<option value="1">One</option>
+								<option value="2">Two</option>
+								<option value="3">Three</option>
+							</select>
+							<label for="floatingSelectGrid">Works with selects</label>
+						</div>
+					</div>*@
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+				<a href="#" id="btnSave" type="button" class="btn btn-primary">Kaydet</a>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts
+	{
+	<script src=//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js></script>
+	<script>
+		var DataTable;
+		$(document).ready(function () {
+
+			//========================Ekle Butonu======================
+			$("#btnEkle").click(function(){
+				$("#modal").modal('show');//Açılır pencereyi aç
+				$("#modalTitleId").text("Yazar Ekle");//Pencerenin adı
+				$("#txtName").val("");//yukarıda idleri tanımlanan text kutularını çağır
+				$("#txtDescription").val("");
+				$("#btnSave").text("Kaydet").removeClass("btn-success").addClass("btn-primary");
+
+				//Anlamadım bunu ne için yazdık................................
+				$("#btnSave").off();
+				//========================Ekle'nin içindeki kaydet butonu======================
+				$("#btnSave").click(function(){
+					let veri ={
+						name: $("#txtName").val(),
+						description: $("#txtDescription").val()
+					};
+					$.ajax({
+						type: 'POST',
+						url: 'Author/Create',
+						data: veri,
+						success: function (res) {
+							$("#modal").modal('hide');//açılan pencereyi kapat
+							
+							toastr.error("Kayıt başarıyla eklendi");
+							DataTable.ajax.reload();//Tabloyu yeniden yükle
+						}
+						
+					})
+				})
+			})
+
+			
+
+
+			//========================DataTable======================
+			DataTable = $('#tblAuthor').DataTable({
+				ajax: 'Author/GetAll',
+				columns:
+					[
+						{ data: 'id' },
+						{ data: 'name' },
+						{ data: 'description' },
+						{ data: 'dateCreated' },
+						{
+							data: 'id',
+							render: function (data) {
+								return `<a href="#" onclick="deleteAuthor('${data}')" class="btn btn-sm btn-danger">Sil</a><a href="#" onclick="editAuthor('${data}')" class="btn btn-sm btn-warning">Düzenle</a> `
+							}
+						}
+
+					]
+
+			});
+
+		});
+
+
+
+		function deleteAuthor(id) {
+			let data = { id: id }
+			Swal.fire({
+				title: 'Silmek istediğinize emin misiniz?',
+				showDenyButton: true,
+				//showCancelButton: true,
+				confirmButtonText: 'Evet',
+				denyButtonText: `Vazgeç`,
+			}).then((result) => {
+				/* Read more about isConfirmed, isDenied below */
+				if (result.isConfirmed) {
+					$.ajax({
+						type: 'DELETE',
+						url: 'Author/Delete',
+						data: data,
+						success: function () {
+							DataTable.ajax.reload();
+						},
+						error: function () {
+							toastr.error("Hata Oluştu");
+						},
+					})
+
+				} else if (result.isDenied) {
+					Swal.fire('Silme işlemi iptal edilmiştir.', '', 'info')
+				}
+			})
+		}
+
+		function editAuthor(id) {
+			$("#modalTitleId").text("Düzenle");
+			//$("#modal").modal('show');//Açılır pencereyi aç
+			//$("#txtName").val("");//yukarıda idleri tanımlanan text kutularını çağır
+			//$("#txtDescription").val("");
+			
+			$("#btnSave").text("Güncelle").removeClass("btn-primary").addClass("btn-success");
+
+			//----------------ajax kısmını buaraya yaz-------------------------------
+
+			$.ajax({
+				type: 'POST',
+				url: 'Author/GetById',
+				data: {id:id},
+				success: function (res) {
+
+					$("#txtName").val(res.name);//buradeki res kutunun içindeki değeri getir
+					$("#txtDescription").val(res.description);
+					$("#modal").modal('show');
+					$("#btnSave").off();//karışıklık olmasın diye buraya kadar btn save fonksiyonlarını kapat
+
+
+					$("#btnSave").click(function () {
+						$.ajax({
+							type: 'POST',
+							url: 'Author/Update',
+							data: {
+								id:id,
+								name: $("#txtName").val(),
+								description: $("#txtDescription").val()
+							},
+							success: function () {
+								$("#modal").modal('hide');//açılan pencereyi kapat
+								Swal.fire({
+									position: 'middle-center',
+									icon: 'success',
+									title: 'Güncellendi',
+									showConfirmButton: false,
+									timer: 1500
+								})
+								DataTable.ajax.reload();//Tabloyu yeniden yükle
+							}
+
+						});
+					});
+
+
+
+
+
+
+					
+				},
+				
+			});
+
+			
+
+		}
+
+	</script>
+}

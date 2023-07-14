@@ -1,0 +1,37 @@
+﻿@section Styles
+    {
+    <link rel="stylesheet" href=//cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css />
+
+}
+
+<div class="row">
+    <div class="card">
+        <div class="card-header  text-white bg-success bg-gradient">Kategori Listesi</div>
+        <div class="card-body">
+            <table id="tblCategory" class="table table-bordered table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Guid</th>
+                        <th>Kategori Adı</th>
+                        <th>Açıklama</th>
+                        <th>Oluşturma Tarihi</th>
+                    </tr>
+                </thead>
+               
+            </table>
+
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts
+    {
+    <script src=//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js></script>
+    <script>
+
+        let table = new DataTable('#tblCategory');
+        $("#tblCategory").DataTable();
+    </script>
+}
