@@ -1,0 +1,8 @@
+![kullanıcı girişi](https://github.com/ycihan0/KutuphaneC/assets/133245392/5f5ac72a-d1fd-448a-a674-c3a35ac7cdf3)
+![anasayfa](https://github.com/ycihan0/KutuphaneC/assets/133245392/5462bfb6-d354-42a8-99dd-9ce8f75b6d6b)
+![kullanıcı yönetimi](https://github.com/ycihan0/KutuphaneC/assets/133245392/04a24f9c-cb84-46c1-98a4-e8d2fef28303)
+![kitaplar sayfası](https://github.com/ycihan0/KutuphaneC/assets/133245392/fb1e9c1d-7091-4ee6-a5bc-22157f84f513)
+![yazarlar sayfası](https://github.com/ycihan0/KutuphaneC/assets/133245392/e0755f80-f05e-41cb-97be-e44cd49ca6cc)
+![kitap ve yazar ekle](https://github.com/ycihan0/KutuphaneC/assets/133245392/212c4c66-2277-484a-8a02-3f4487375c97)
+![düzenle ve sil](https://github.com/ycihan0/KutuphaneC/assets/133245392/7c8ee1e3-49c0-4071-9811-dee783faeeb3)
+![sqlde](https://github.com/ycihan0/KutuphaneC/assets/133245392/0dba0b05-1734-43d6-8c70-9262e7f6bf46)
